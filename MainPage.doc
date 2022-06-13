@@ -1,0 +1,167 @@
+
+/*! \mainpage Homepage
+ *
+ * \section intro_sec Introduction
+ *
+ * The project consists in a client/server architecture voice over IP application, similar to Skype or TeamSpeak.
+ *
+ * <br>
+ * \section install_sec Installation
+ *
+ * The Babel is a cross platform project, useable on both Windows and Linux.
+ *
+ * <br>
+ * \subsection step1 Step 1: Prerequisites
+ *
+ * To install the project, you will first need to install [Conan](https://conan.io/) and [CMake](https://cmake.org/)
+ *
+ * If you are on Windows, you will also need to install [Visual Studio C++](Modifier le lien)
+ *
+ * Once Conan is installed, you'll have to add the Conan Remotes with these commands:
+ *
+ *     conan remote add epitech     https://api.bintray.com/conan/epitech/public-conan
+ *     conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+ *
+ * <br>
+ * To install the project, open a terminal in the project's directory and use these command lines:
+ *
+ *     cmake -E make_directory build && cd build                                            // Create and enter the directory
+ *     conan install .. --build=missing -s build_type=Release                               // Use Conan to install the dependencies
+ *
+ * <br>
+ * \subsection step2 Step 2a: Linux
+ *
+ *     cmake .. -DCMAKE_BUILD_TYPE=Release                                                  // Build the Makefiles with CMAKE
+ *     cmake --build .                                                                      // Build the project with CMAKE
+ *
+ * <br>
+ * \subsection step3 Step 2b: Windows
+ *     Option A:
+ *       cmake .. -DCMAKE_BUILD_TYPE=Release                                                // Build the Makefiles with CMAKE
+ *       msbuild /t:Build /p:Configuration=$env:Release Babel.sln                           // Build the project with msbuild
+ *
+ *     Option B:
+ *       cmake .. -G "Visual Studio 16"                                                    // Build Babel.sln with CMAKE
+ *       cmake --build . --config Release                                                  // Build the .exe files
+ *       $env:path += ";{PATH_CONAN_BIN}"                                                     // Add conan binaries path to env (ex: C:\.conan\be9df3\1\bin)
+ *
+ * Once it is done, you'll find the executables into the /build/bin folder.
+ *
+ *
+ * <br>
+ * <br>
+ * <br>
+ * \section usage Usage
+ *
+ * If you want to use the server, launch the babel_server
+ *
+ * If you want to use the client, launch the babel_client with the ip of the server:
+ *
+ *    Example: ./babel_client 127.0.0.1
+ *
+ * Exemple of the client interface:
+ *
+ * \image html picture.png
+ *
+ *
+ * <br>
+ * \section in_works VOIP Commands
+ * Here are the inners workings of our program. In this section, we will describe the commands used by our VOIP protocol
+ *
+ * Global working:
+ *     Command -> Serialize the information -> Send it into a socket
+ *     Socket receive something -> Deserialize the information -> Do Something
+ *
+ * The serialization and deserialization are both done with [Boost Serialize](https://www.boost.org/doc/libs/1_73_0/libs/serialization/doc/tutorial.html)
+ *
+ * For more informations, check the \ref babel::ClientConnection::serializeAndSend "Serialization" and \ref babel::ClientConnection::deserializeAndEmitSignal "Deserialization" functions
+ *
+ *
+ * Command example:
+ *
+ *      IdentifyCommand 22 serialization::archive 17 0 0 46759
+ *
+ * Here, the object to serialize is babel::commands::IdentifyCommand "IdentifyCommand(USER_ID_NONE)" and the serialized format is MESSAGE_NAME SPACE MESSAGE_SERIALIZE_WITH_BOOST CRLF
+ *
+ * Specific working of each command:
+ *
+ *
+ * <br>
+ * \subsection command_1 Identify
+ *
+ * \ref babel::commands::IdentifyCommand "IdentifyCommand" -> \ref babel::events::SelfEvent "SelfEvent" || \ref babel::events::ErrorEvent "ErrorEvent"
+ *
+ * Create a new user or connect a user to the server
+ *
+ *      Identify -> User: Serialize UserID          -> Send it to socket
+ *                  Server: Deserialize UserID      ->  Depending on the UserID
+ *                                                      ->  UserID == 0 -> Ask to create a new user
+ *                                                      ->  UserID != 0 -> Connect the User -> Notify Change all sockets
+ *
+ *
+ * <br>
+ *
+ * \subsection command_2 Update
+ *
+ * \ref babel::commands::UpdateCommand "UpdateCommand" -> \ref babel::events::UserEvent "UserEvent" || \ref babel::events::ErrorEvent "ErrorEvent"
+ *
+ * Inform all users of a change in the database
+ *
+ *      Update   -> Server: Serialize user list     -> Send it to all sockets
+ *               -> Users: Deserialize User list    ->  Modify user status
+ *
+ *
+ * <br>
+ *
+ * \subsection command_3 Call
+ *
+ * \ref babel::commands::CallCommand "CallCommand" -> \ref babel::events::CallEvent "CallEvent" || \ref babel::events::ErrorEvent "ErrorEvent"
+ *
+ * Call a user
+ *
+ *      Call     -> Users: Serialize UserID to call -> Send it to socket
+ *               -> Server: Deserialize UserID      -> launch CallEvent with UserID
+ *
+ *
+ * <br>
+ * \subsection command_4 HangUp
+ *
+ * \ref babel::commands::HangUpCommand "HangUpCommand" -> \ref babel::events::HangUpEvent "HangUpEvent" || \ref babel::events::ErrorEvent "ErrorEvent"
+ *
+ * Hangup with a user
+ *
+ *      HangUp   -> Users: Serialize UserID         -> Send it to socket
+ *               -> Server: Deserialize UserID      -> launch HangUp event with UserID
+ *
+ * <br>
+ * \subsection command_5 Message
+ *
+ * \ref babel::commands::MessageCommand "MessageCommand" -> \ref babel::events::MessageEvent "MessageEvent" || \ref babel::events::ErrorEvent "ErrorEvent"
+ *
+ * Send a message
+ *
+ *      Message  -> Users: Serialize Message &UserID-> Send it to socket
+ *               -> Server: Deserialize informations-> launch Message event with UserID and Message content
+ *
+ *
+ * <br>
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */

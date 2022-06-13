@@ -1,0 +1,35 @@
+name: CMake
+
+on: [push]
+
+env:
+  # Customize the CMake build type here (Release, Debug, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  ubuntu-build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install missing native packages
+      run: sudo apt install qtbase5-dev libboost-all-dev portaudio19-dev libssl-dev libopus-dev
+
+    - name: Setup Repository
+      run: cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Configure CMake
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: cmake --build . --config $BUILD_TYPE
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: babel-ubuntu-build
+        path: ${{runner.workspace}}/build/

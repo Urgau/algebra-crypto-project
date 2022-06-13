@@ -1,0 +1,16 @@
+<RCC>
+    <qresource>
+        <file alias="Visible.svg">Visible.png</file>
+        <file alias="Busy.svg">Busy.png</file>
+        <file alias="Invisible.svg">Invisible.png</file>
+        <file alias="Unavailable.svg">Unavailable.png</file>
+        <file alias="Settings.svg">Settings.png</file>
+        <file alias="Send.svg">Send.png</file>
+        <file alias="Avatar.svg">Avatar.png</file>
+        <file alias="Loading.svg">Loading.png</file>
+        <file alias="AudioInput.svg">AudioInput.png</file>
+        <file alias="AudioOutput.svg">AudioOutput.png</file>
+        <file alias="Deafen.svg">Deafen.png</file>
+        <file alias="Mute.svg">Mute.png</file>
+    </qresource>
+</RCC>

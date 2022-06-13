@@ -1,0 +1,16 @@
+<RCC>
+    <qresource>
+        <file>Visible.svg</file>
+        <file>Busy.svg</file>
+        <file>Invisible.svg</file>
+        <file>Unavailable.svg</file>
+        <file>Settings.svg</file>
+        <file>Send.svg</file>
+        <file>Avatar.svg</file>
+        <file>Loading.svg</file>
+        <file>AudioInput.svg</file>
+        <file>AudioOutput.svg</file>
+        <file>Deafen.svg</file>
+        <file>Mute.svg</file>
+    </qresource>
+</RCC>
